@@ -46,10 +46,20 @@ func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 }
 
+// eatWhitespace will advance the position in the input when a whitespace
+// is found.
+func (l *Lexer) eatWhitespace() {
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+		l.readChar()
+	}
+}
+
 // NextToken looks at the current character under examination (l.ch) and
 // returns a token depending on which character it is.
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
+
+	l.eatWhitespace()
 
 	switch l.ch {
 	case '=':
@@ -74,6 +84,7 @@ func (l *Lexer) NextToken() token.Token {
 	default:
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()
+			tok.Type = token.LookupIdent(tok.Literal)
 			return tok
 		} else {
 			tok = newToken(token.ILLEGAL, l.ch)
