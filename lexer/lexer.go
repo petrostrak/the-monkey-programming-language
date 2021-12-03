@@ -1,6 +1,8 @@
 package lexer
 
-import "github.com/petrostrak/the-monkey-programming-language/token"
+import (
+	"github.com/petrostrak/the-monkey-programming-language/token"
+)
 
 type Lexer struct {
 	input        string
@@ -41,9 +43,25 @@ func (l *Lexer) readIdentifier() string {
 	return l.input[position:l.position]
 }
 
+// readNumber reads an identifier and advances our lexer's position
+// until it encounters a non-number.
+func (l *Lexer) readNumber() string {
+	position := l.position
+	for isDigit(l.ch) {
+		l.readChar()
+	}
+
+	return l.input[position:l.position]
+}
+
 // isLetter checks if the given byte is a letter character.
 func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+}
+
+// isDigit checks if the given byte is a number.
+func isDigit(ch byte) bool {
+	return '0' <= ch && ch <= '9'
 }
 
 // eatWhitespace will advance the position in the input when a whitespace
@@ -85,6 +103,10 @@ func (l *Lexer) NextToken() token.Token {
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
+			return tok
+		} else if isDigit(l.ch) {
+			tok.Type = token.INT
+			tok.Literal = l.readNumber()
 			return tok
 		} else {
 			tok = newToken(token.ILLEGAL, l.ch)
