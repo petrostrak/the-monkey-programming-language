@@ -72,6 +72,16 @@ func (l *Lexer) eatWhitespace() {
 	}
 }
 
+// peekChar peeks ahead in the input to know what a call to
+// readChar() would return.
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
+}
+
 // NextToken looks at the current character under examination (l.ch) and
 // returns a token depending on which character it is.
 func (l *Lexer) NextToken() token.Token {
@@ -81,7 +91,15 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ch {
 	case '=':
-		tok = newToken(token.ASSIGN, l.ch)
+		if l.peekChar() == '=' {
+			// save current character before advancing the lexer.
+			ch := l.ch
+			l.readChar()
+			literal := string(ch) + string(l.ch)
+			tok = token.Token{Type: token.EQ, Literal: literal}
+		} else {
+			tok = newToken(token.ASSIGN, l.ch)
+		}
 	case ';':
 		tok = newToken(token.SEMICOLON, l.ch)
 	case '(':
@@ -99,7 +117,14 @@ func (l *Lexer) NextToken() token.Token {
 	case '-':
 		tok = newToken(token.MINUS, l.ch)
 	case '!':
-		tok = newToken(token.BANG, l.ch)
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			literal := string(ch) + string(l.ch)
+			tok = token.Token{Type: token.NE, Literal: literal}
+		} else {
+			tok = newToken(token.BANG, l.ch)
+		}
 	case '*':
 		tok = newToken(token.ASTERISK, l.ch)
 	case '/':
