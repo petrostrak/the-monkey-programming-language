@@ -28,6 +28,76 @@ func (p *Parser) nextToken() {
 	p.peekToken = p.l.NextToken()
 }
 
+func (p *Parser) peekTokenIs(t token.TokenType) bool {
+	return p.peekToken.Type == t
+}
+
+// expectedPeek is one of the assertion functions. The primary purpose
+// of it is to enforce the correctness of the order of tokens by checking
+// the type of the next token.
+func (p *Parser) expectedPeek(t token.TokenType) bool {
+	if p.peekTokenIs(t) {
+		p.nextToken()
+		return true
+	} else {
+		return false
+	}
+}
+
+func (p *Parser) curTokenIs(t token.TokenType) bool {
+	return p.curToken.Type == t
+}
+
+func (p *Parser) parseLetStatement() *ast.LetStatement {
+
+	// We construct a node with the token it's currently sitting
+	stmt := &ast.LetStatement{Token: p.curToken}
+
+	if !p.expectedPeek(token.IDENT) {
+		return nil
+	}
+
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	if !p.expectedPeek(token.ASSIGN) {
+		return nil
+	}
+
+	// TODO: we skip the expression until we encounter a semicolon
+
+	for !p.curTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
+
+// parseStatement 's job is to parse a statement.
+func (p *Parser) parseStatement() ast.Statement {
+	switch p.curToken.Type {
+	case token.LET:
+		return p.parseLetStatement()
+	default:
+		return nil
+	}
+}
+
 func (p *Parser) ParseProgram() *ast.Program {
-	return nil
+
+	// First thing, we construct the root node of the AST.
+	program := &ast.Program{}
+	program.Statements = []ast.Statement{}
+
+	// Then we iterate over every token in the input until it
+	// encounters an token.EOF.
+	for p.curToken.Type != token.EOF {
+		stmt := p.parseStatement()
+		if stmt != nil {
+			program.Statements = append(program.Statements, stmt)
+		}
+
+		p.nextToken()
+	}
+
+	return program
 }
