@@ -90,7 +90,7 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 	// Then we iterate over every token in the input until it
 	// encounters an token.EOF.
-	for p.curToken.Type != token.EOF {
+	for !p.curTokenIs(token.EOF) {
 		stmt := p.parseStatement()
 		if stmt != nil {
 			program.Statements = append(program.Statements, stmt)
