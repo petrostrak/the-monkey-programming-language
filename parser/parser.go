@@ -9,7 +9,7 @@ import (
 	"github.com/petrostrak/the-monkey-programming-language/token"
 )
 
-var precedence = map[token.TokenType]int{
+var precedences = map[token.TokenType]int{
 	token.EQ:       EQUALS,
 	token.NE:       EQUALS,
 	token.LT:       LESSGREATER,
@@ -258,7 +258,7 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 
 	lit.Value = value
 
-	return p.parseIntegerLiteral()
+	return lit
 }
 
 func (p *Parser) noPrefixParseFnError(t token.TokenType) {
@@ -267,7 +267,7 @@ func (p *Parser) noPrefixParseFnError(t token.TokenType) {
 }
 
 func (p *Parser) peekPrecedence() int {
-	if p, ok := precedence[p.peekToken.Type]; ok {
+	if p, ok := precedences[p.peekToken.Type]; ok {
 		return p
 	}
 
@@ -275,7 +275,7 @@ func (p *Parser) peekPrecedence() int {
 }
 
 func (p *Parser) curPrecedence() int {
-	if p, ok := precedence[p.curToken.Type]; ok {
+	if p, ok := precedences[p.curToken.Type]; ok {
 		return p
 	}
 

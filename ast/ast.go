@@ -123,7 +123,7 @@ type IntegerLiteral struct {
 }
 
 func (il *IntegerLiteral) expressionNode()      {}
-func (il *IntegerLiteral) TokenLiteral() string { return il.TokenLiteral() }
+func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }
 func (il *IntegerLiteral) String() string       { return il.Token.Literal }
 
 type PrefixExpression struct {
@@ -146,13 +146,13 @@ func (pe *PrefixExpression) String() string {
 }
 
 type InfixExpression struct {
-	Token       token.Token
+	Token       token.Token // The operator token, e.g. +
 	Operator    string
 	Left, Right Expression
 }
 
 func (ie *InfixExpression) expressionNode()      {}
-func (ie *InfixExpression) TokenLiteral() string { return ie.TokenLiteral() }
+func (ie *InfixExpression) TokenLiteral() string { return ie.Token.Literal }
 func (ie *InfixExpression) String() string {
 	var out bytes.Buffer
 
