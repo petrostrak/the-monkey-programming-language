@@ -37,8 +37,8 @@ const (
 	ELSE     = "ELSE"
 	RETURN   = "RETURN"
 
-	EQ = "=="
-	NE = "!="
+	EQ     = "=="
+	NOT_EQ = "!="
 )
 
 type TokenType string
