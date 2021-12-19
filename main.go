@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/user"
 
-	"github.com/petrostrak/the-monkey-programming-language/perl"
+	perl "github.com/petrostrak/the-monkey-programming-language/repl"
 )
 
 func main() {
