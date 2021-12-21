@@ -1,6 +1,8 @@
 package evaluator
 
 import (
+	"fmt"
+
 	"github.com/petrostrak/the-monkey-programming-language/ast"
 	"github.com/petrostrak/the-monkey-programming-language/object"
 )
@@ -175,4 +177,8 @@ func evalProgram(program *ast.Program) object.Object {
 	}
 
 	return result
+}
+
+func newError(format string, a ...interface{}) *object.Error {
+	return &object.Error{Message: fmt.Sprintf(format, a...)}
 }
