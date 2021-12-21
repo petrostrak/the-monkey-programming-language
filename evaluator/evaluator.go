@@ -204,3 +204,11 @@ func evalBlockStatement(block *ast.BlockStatement) object.Object {
 
 	return result
 }
+
+func isError(obj object.Object) bool {
+	if obj != nil {
+		return obj.Type() == object.ERROR_OBJ
+	}
+
+	return false
+}
