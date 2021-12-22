@@ -7,6 +7,7 @@ import (
 
 	"github.com/petrostrak/the-monkey-programming-language/evaluator"
 	"github.com/petrostrak/the-monkey-programming-language/lexer"
+	"github.com/petrostrak/the-monkey-programming-language/object"
 	"github.com/petrostrak/the-monkey-programming-language/parser"
 )
 
@@ -17,6 +18,7 @@ const PROMPT = ">> "
 // all the tokens the lexer gives us until we encounter EOF.
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	env := object.NewEnvironment()
 
 	for {
 		fmt.Fprint(out, PROMPT)
@@ -35,7 +37,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		evaluated := evaluator.Eval(program)
+		evaluated := evaluator.Eval(program, env)
 		if evaluated != nil {
 			io.WriteString(out, evaluated.Inspect())
 			io.WriteString(out, "\n")
