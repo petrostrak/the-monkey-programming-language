@@ -41,6 +41,9 @@ const (
 	NOT_EQ = "!="
 
 	STRING = "STRING"
+
+	LBRACKET = "["
+	RBRACKET = "]"
 )
 
 type TokenType string
