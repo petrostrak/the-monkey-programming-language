@@ -39,6 +39,8 @@ const (
 
 	EQ     = "=="
 	NOT_EQ = "!="
+
+	STRING = "STRING"
 )
 
 type TokenType string
