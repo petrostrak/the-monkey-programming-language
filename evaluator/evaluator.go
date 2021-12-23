@@ -103,7 +103,11 @@ func extendedFunctionEnv(fn *object.Function, args []object.Object) *object.Envi
 }
 
 func unwrapReturnValue(obj object.Object) object.Object {
+	if returnValue, ok := obj.(*object.ReturnValue); ok {
+		return returnValue.Value
+	}
 
+	return obj
 }
 
 func evalStatements(stmts []ast.Statement, env *object.Environment) object.Object {
