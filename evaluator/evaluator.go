@@ -249,12 +249,14 @@ func evalIdentifier(
 	node *ast.Identifier,
 	env *object.Environment,
 ) object.Object {
-	val, ok := env.Get(node.Value)
-	if !ok {
-		return newError("identifier not found: " + node.Value)
+	if val, ok := env.Get(node.Value); ok {
+		return val
+	}
+	if builtin, ok := buildins[node.Value]; ok {
+		return builtin
 	}
 
-	return val
+	return newError("identifier not found: " + node.Value)
 }
 
 func isTruthy(obj object.Object) bool {
