@@ -137,7 +137,7 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = ""
 		tok.Type = token.EOF
 	case '"':
-		tok.Type = token.SLASH
+		tok.Type = token.STRING
 		tok.Literal = l.readString()
 	default:
 		if isLetter(l.ch) {
