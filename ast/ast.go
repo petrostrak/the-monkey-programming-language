@@ -300,7 +300,7 @@ func (al *ArrayLiteral) String() string {
 type IndexExpression struct {
 	Token token.Token // the [ token
 	Left  Expression
-	Right Expression
+	Index Expression
 }
 
 func (ie *IndexExpression) expressionNode()      {}
@@ -311,7 +311,7 @@ func (ie *IndexExpression) String() string {
 	out.WriteString("(")
 	out.WriteString(ie.Left.String())
 	out.WriteString("[")
-	out.WriteString(ie.Right.String())
+	out.WriteString(ie.Index.String())
 	out.WriteString("]")
 
 	return out.String()
