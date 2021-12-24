@@ -1,6 +1,8 @@
 package evaluator
 
 import (
+	"fmt"
+
 	"github.com/petrostrak/the-monkey-programming-language/object"
 )
 
@@ -93,6 +95,15 @@ var buildins = map[string]*object.Builtin{
 			newElement[legth] = args[1]
 
 			return &object.Array{Elements: newElement}
+		},
+	},
+	"puts": {
+		Fn: func(args ...object.Object) object.Object {
+			for _, arg := range args {
+				fmt.Println(arg.Inspect())
+			}
+
+			return NULL
 		},
 	},
 }
