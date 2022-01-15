@@ -1,22 +1,24 @@
 package compiler
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/petrostrak/the-monkey-programming-language/ast"
 	"github.com/petrostrak/the-monkey-programming-language/code"
 	"github.com/petrostrak/the-monkey-programming-language/lexer"
+	"github.com/petrostrak/the-monkey-programming-language/object"
 	"github.com/petrostrak/the-monkey-programming-language/parser"
 )
 
-type compilerTesCase struct {
+type compilerTestCase struct {
 	input                string
 	expectedConstants    []interface{}
 	expectedInstructions []code.Instructions
 }
 
 func TestIntegerArithmetic(t *testing.T) {
-	testCases := []compilerTesCase{
+	testCases := []compilerTestCase{
 		{
 			input:             "1 + 2",
 			expectedConstants: []interface{}{1, 2},
@@ -36,7 +38,7 @@ func parse(input string) *ast.Program {
 	return p.ParseProgram()
 }
 
-func runCompilerTests(t *testing.T, testCases []compilerTesCase) {
+func runCompilerTests(t *testing.T, testCases []compilerTestCase) {
 	t.Helper()
 
 	for _, tt := range testCases {
@@ -48,9 +50,64 @@ func runCompilerTests(t *testing.T, testCases []compilerTesCase) {
 			t.Fatalf("compiler error: %s", err)
 		}
 
+		bytecode := compiler.Bytecode()
+
 		err = testConstants(t, tt.expectedConstants, bytecode.Constants)
 		if err != nil {
 			t.Fatalf("testConstants failed: %s", err)
 		}
 	}
+}
+
+func testInstructions(expected []code.Instructions, actual code.Instructions) error {
+	concatted := concatInstructions(expected)
+
+	if len(actual) != len(concatted) {
+		return fmt.Errorf("wrong instructions length.\rwant %q\ngot %q", concatted, actual)
+	}
+
+	for i, ins := range concatted {
+		if actual[i] != ins {
+			return fmt.Errorf("wrong instruction at %d.\nwant %q/ngot %q", i, concatted, actual)
+		}
+	}
+
+	return nil
+}
+
+func concatInstructions(s []code.Instructions) code.Instructions {
+	out := code.Instructions{}
+
+	for _, ins := range s {
+		out = append(out, ins...)
+	}
+
+	return out
+}
+
+func testConstants(t *testing.T, expected []interface{}, actual []object.Object) error {
+	if len(expected) != len(actual) {
+		return fmt.Errorf("wrong number of constants; got %d, want %d", len(actual), len(expected))
+	}
+
+	for i, constant := range expected {
+		switch constant := constant.(type) {
+		case int:
+			err := testIntegerObject(int64(constant), actual[i])
+			if err != nil {
+				return fmt.Errorf("constant %d - testIntegerObject failed: %s", i, err)
+			}
+		}
+	}
+
+	return nil
+}
+
+func testIntegerObject(expected int64, actual object.Object) error {
+	result, ok := actual.(*object.Integer)
+	if !ok {
+		return fmt.Errorf("object is not integer; got %T (%+v)", result.Value, expected)
+	}
+
+	return nil
 }
