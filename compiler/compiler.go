@@ -48,6 +48,7 @@ func (c *Compiler) Compile(node ast.Node) error {
 		}
 	case *ast.IntegerLiteral:
 		integer := &object.Integer{Value: node.Value}
+		c.emit(code.OpConstant, c.addConstant(integer))
 	}
 
 	return nil
@@ -63,4 +64,16 @@ func (c *Compiler) Bytecode() *Bytecode {
 func (c *Compiler) addConstant(obj object.Object) int {
 	c.constants = append(c.constants, obj)
 	return len(c.constants) - 1
+}
+
+func (c *Compiler) emit(op code.Opcode, operands ...int) int {
+	ins := code.Make(op, operands...)
+	pos := c.addInstructions(ins)
+	return pos
+}
+
+func (c *Compiler) addInstructions(ins []byte) int {
+	posNewInstruciton := len(c.instructions)
+	c.instructions = append(c.instructions, ins...)
+	return posNewInstruciton
 }
