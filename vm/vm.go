@@ -1,6 +1,8 @@
 package vm
 
 import (
+	"fmt"
+
 	"github.com/petrostrak/the-monkey-programming-language/code"
 	"github.com/petrostrak/the-monkey-programming-language/compiler"
 	"github.com/petrostrak/the-monkey-programming-language/object"
@@ -31,4 +33,34 @@ func (vm *VM) StackTop() object.Object {
 		return nil
 	}
 	return vm.stack[vm.sp-1]
+}
+
+func (vm *VM) push(o object.Object) error {
+	if vm.sp > StackSize {
+		return fmt.Errorf("stack overflow")
+	}
+
+	vm.stack[vm.sp] = o
+	vm.sp++
+
+	return nil
+}
+
+func (vm *VM) Run() error {
+	for ip := 0; ip < len(vm.instructions); ip++ {
+		op := code.Opcode(vm.instructions[ip])
+
+		switch op {
+		case code.OpConstant:
+			constIndex := code.ReadUint16(vm.instructions[ip+1:])
+			ip += 2
+
+			err := vm.push(vm.constants[constIndex])
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }
