@@ -12,6 +12,7 @@ type Opcode byte
 
 const (
 	OpConstant Opcode = iota
+	OpAdd
 )
 
 // The Definition of an Opcode has two fields. Name helps
@@ -25,6 +26,7 @@ type Definition struct {
 var (
 	definitions = map[Opcode]*Definition{
 		OpConstant: {"OpConstant", []int{2}},
+		OpAdd:      {"OpAdd", []int{}},
 	}
 )
 
