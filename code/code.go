@@ -17,6 +17,8 @@ const (
 	OpSub
 	OpMul
 	OpDiv
+	OpTrue
+	OpFalse
 )
 
 // The Definition of an Opcode has two fields. Name helps
@@ -35,6 +37,8 @@ var (
 		OpSub:      {"OpSub", []int{}},
 		OpMul:      {"OpMul", []int{}},
 		OpDiv:      {"OpDiv", []int{}},
+		OpTrue:     {"OpTrue", []int{}},
+		OpFalse:    {"OpFalse", []int{}},
 	}
 )
 
