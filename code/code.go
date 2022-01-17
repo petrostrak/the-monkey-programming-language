@@ -14,6 +14,9 @@ const (
 	OpConstant Opcode = iota
 	OpAdd
 	OpPop
+	OpSub
+	OpMul
+	OpDiv
 )
 
 // The Definition of an Opcode has two fields. Name helps
@@ -29,6 +32,9 @@ var (
 		OpConstant: {"OpConstant", []int{2}},
 		OpAdd:      {"OpAdd", []int{}},
 		OpPop:      {"OpPop", []int{}},
+		OpSub:      {"OpSub", []int{}},
+		OpMul:      {"OpMul", []int{}},
+		OpDiv:      {"OpDiv", []int{}},
 	}
 )
 
