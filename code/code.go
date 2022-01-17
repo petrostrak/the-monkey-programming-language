@@ -13,6 +13,7 @@ type Opcode byte
 const (
 	OpConstant Opcode = iota
 	OpAdd
+	OpPop
 )
 
 // The Definition of an Opcode has two fields. Name helps
@@ -27,6 +28,7 @@ var (
 	definitions = map[Opcode]*Definition{
 		OpConstant: {"OpConstant", []int{2}},
 		OpAdd:      {"OpAdd", []int{}},
+		OpPop:      {"OpPop", []int{}},
 	}
 )
 
