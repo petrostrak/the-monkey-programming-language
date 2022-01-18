@@ -22,6 +22,8 @@ const (
 	OpEqual
 	OpNotEqual
 	OpGreaterThan
+	OpMinus
+	OpBang
 )
 
 // The Definition of an Opcode has two fields. Name helps
@@ -45,6 +47,8 @@ var (
 		OpEqual:       {"OpEqual", []int{}},
 		OpNotEqual:    {"OpNotEqual", []int{}},
 		OpGreaterThan: {"OpGreaterThan", []int{}},
+		OpMinus:       {"OpMinus", []int{}},
+		OpBang:        {"OpBang", []int{}},
 	}
 )
 
