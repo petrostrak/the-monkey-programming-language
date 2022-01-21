@@ -26,6 +26,7 @@ const (
 	OpBang
 	OpJumpNotTruthy
 	OpJump
+	OpNull
 )
 
 // The Definition of an Opcode has two fields. Name helps
@@ -53,6 +54,7 @@ var (
 		OpBang:          {"OpBang", []int{}},
 		OpJumpNotTruthy: {"OpJumpNotTruthy", []int{2}},
 		OpJump:          {"OpJump", []int{2}},
+		OpNull:          {"OpNull", []int{}},
 	}
 )
 
