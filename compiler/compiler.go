@@ -8,6 +8,21 @@ import (
 	"github.com/petrostrak/the-monkey-programming-language/object"
 )
 
+const (
+	GlobalScope SymbolScope = "GLOBAL"
+)
+
+type Symbol struct {
+	Name  string
+	Scope SymbolScope
+	Index int
+}
+
+type SymbolTable struct {
+	store          map[string]Symbol
+	numDefinitions int
+}
+
 type Compiler struct {
 	instructions        code.Instructions
 	constants           []object.Object
@@ -25,6 +40,8 @@ type Bytecode struct {
 	Constants    []object.Object
 }
 
+type SymbolScope string
+
 func New() *Compiler {
 	return &Compiler{
 		instructions:        code.Instructions{},
@@ -32,6 +49,11 @@ func New() *Compiler {
 		lastInstruction:     EmittedInstruction{},
 		previousInstruction: EmittedInstruction{},
 	}
+}
+
+func NewSymbolTable() *SymbolTable {
+	s := make(map[string]Symbol)
+	return &SymbolTable{store: s}
 }
 
 func (c *Compiler) Compile(node ast.Node) error {
