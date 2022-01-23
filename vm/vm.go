@@ -9,7 +9,8 @@ import (
 )
 
 const (
-	StackSize = 2048
+	StackSize   = 2048
+	GlobalsSize = 65536
 )
 
 var (
@@ -23,6 +24,7 @@ type VM struct {
 	instructions code.Instructions
 	stack        []object.Object
 	sp           int // Always points to the next value. Top of stack is stack[sp-1]
+	globals      []object.Object
 }
 
 func New(bytecode *compiler.Bytecode) *VM {
@@ -31,6 +33,7 @@ func New(bytecode *compiler.Bytecode) *VM {
 		constants:    bytecode.Constants,
 		stack:        make([]object.Object, StackSize),
 		sp:           0,
+		globals:      make([]object.Object, GlobalsSize),
 	}
 }
 
@@ -189,6 +192,13 @@ func (vm *VM) Run() error {
 			}
 		case code.OpNull:
 			err := vm.push(Null)
+			if err != nil {
+				return err
+			}
+		case code.OpGetGlobal:
+			globalIndex := code.ReadUint16(vm.instructions[ip+1:])
+			ip += 2
+			err := vm.push(vm.globals[globalIndex])
 			if err != nil {
 				return err
 			}
