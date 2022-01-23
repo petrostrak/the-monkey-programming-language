@@ -250,3 +250,10 @@ func (c *Compiler) addInstructions(ins []byte) int {
 	c.instructions = append(c.instructions, ins...)
 	return posNewInstruciton
 }
+
+func NewWithState(s *SymbolTable, constants []object.Object) *Compiler {
+	compiler := New()
+	compiler.symbolTable = s
+	compiler.constants = constants
+	return compiler
+}
