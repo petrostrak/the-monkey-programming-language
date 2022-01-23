@@ -252,3 +252,9 @@ func (vm *VM) executeIntegerComparison(op code.Opcode, left, right object.Object
 		return fmt.Errorf("unknown operator: %d", op)
 	}
 }
+
+func NewWithGlobalsStore(bytecode *compiler.Bytecode, s []object.Object) *VM {
+	vm := New(bytecode)
+	vm.globals = s
+	return vm
+}
