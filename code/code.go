@@ -29,6 +29,7 @@ const (
 	OpNull
 	OpGetGlobal
 	OpSetGlobal
+	OpArray
 )
 
 // The Definition of an Opcode has two fields. Name helps
@@ -59,6 +60,7 @@ var (
 		OpNull:          {"OpNull", []int{}},
 		OpGetGlobal:     {"OpGetGlobal", []int{2}},
 		OpSetGlobal:     {"OpSetGlobal", []int{2}},
+		OpArray:         {"OpArray", []int{2}},
 	}
 )
 
