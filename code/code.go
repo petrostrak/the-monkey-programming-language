@@ -31,6 +31,7 @@ const (
 	OpSetGlobal
 	OpArray
 	OpHash
+	OpIndex
 )
 
 // The Definition of an Opcode has two fields. Name helps
@@ -63,6 +64,7 @@ var (
 		OpSetGlobal:     {"OpSetGlobal", []int{2}},
 		OpArray:         {"OpArray", []int{2}},
 		OpHash:          {"OpHash", []int{2}},
+		OpIndex:         {"OpIndex", []int{}},
 	}
 )
 
