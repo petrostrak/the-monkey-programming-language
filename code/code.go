@@ -32,6 +32,9 @@ const (
 	OpArray
 	OpHash
 	OpIndex
+	OpCall
+	OpReturnValue
+	OpReturn
 )
 
 // The Definition of an Opcode has two fields. Name helps
@@ -65,6 +68,9 @@ var (
 		OpArray:         {"OpArray", []int{2}},
 		OpHash:          {"OpHash", []int{2}},
 		OpIndex:         {"OpIndex", []int{}},
+		OpCall:          {"OpCall", []int{}},
+		OpReturnValue:   {"OpReturnValue", []int{}},
+		OpReturn:        {"OpReturn", []int{}},
 	}
 )
 
