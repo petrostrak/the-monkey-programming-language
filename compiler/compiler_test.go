@@ -568,6 +568,39 @@ func TestFunctions(t *testing.T) {
 				code.Make(code.OpPop),
 			},
 		},
+		{
+			input: `fn() { 5 + 10 }`, expectedConstants: []interface{}{
+				5,
+				10,
+				[]code.Instructions{
+					code.Make(code.OpConstant, 0),
+					code.Make(code.OpConstant, 1),
+					code.Make(code.OpAdd),
+					code.Make(code.OpReturnValue),
+				},
+			},
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 2),
+				code.Make(code.OpPop),
+			},
+		},
+		{
+			input: `fn() { 1; 2 }`,
+			expectedConstants: []interface{}{
+				1,
+				2,
+				[]code.Instructions{
+					code.Make(code.OpConstant, 0),
+					code.Make(code.OpPop),
+					code.Make(code.OpConstant, 1),
+					code.Make(code.OpReturnValue),
+				},
+			},
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 2),
+				code.Make(code.OpPop),
+			},
+		},
 	}
 	runCompilerTests(t, tests)
 }
@@ -612,20 +645,4 @@ func TestCompilerScopes(t *testing.T) {
 		t.Errorf("previousInstruction.Opcode wrong. got=%d, want=%d",
 			previous.Opcode, code.OpMul)
 	}
-}
-
-func (c *Compiler) enterScope() {
-	scope := CompilationScope{
-		instructions:    code.Instructions{},
-		lastInstruction: EmittedInstruction{}, previousInstruction: EmittedInstruction{},
-	}
-	c.scopes = append(c.scopes, scope)
-	c.scopeIndex++
-}
-
-func (c *Compiler) leaveScope() code.Instructions {
-	instructions := c.currentInstructions()
-	c.scopes = c.scopes[:len(c.scopes)-1]
-	c.scopeIndex--
-	return instructions
 }
