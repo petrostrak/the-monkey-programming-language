@@ -1,13 +1,23 @@
 package compiler
 
+type SymbolScope string
+
 const (
-	LocalScope  SymbolScope = "LOCAL"
-	GlobalScope SymbolScope = "GLOBAL"
+	LocalScope   SymbolScope = "LOCAL"
+	GlobalScope  SymbolScope = "GLOBAL"
+	BuiltinScope SymbolScope = "BUILTIN"
 )
 
+type Symbol struct {
+	Name  string
+	Scope SymbolScope
+	Index int
+}
+
 type SymbolTable struct {
-	Outer          *SymbolTable
-	storemap       [string]Symbol
+	Outer *SymbolTable
+
+	store          map[string]Symbol
 	numDefinitions int
 }
 
@@ -17,6 +27,11 @@ func NewEnclosedSymbolTable(outer *SymbolTable) *SymbolTable {
 	return s
 }
 
+func NewSymbolTable() *SymbolTable {
+	s := make(map[string]Symbol)
+	return &SymbolTable{store: s}
+}
+
 func (s *SymbolTable) Define(name string) Symbol {
 	symbol := Symbol{Name: name, Index: s.numDefinitions}
 	if s.Outer == nil {
@@ -24,6 +39,7 @@ func (s *SymbolTable) Define(name string) Symbol {
 	} else {
 		symbol.Scope = LocalScope
 	}
+
 	s.store[name] = symbol
 	s.numDefinitions++
 	return symbol
