@@ -2,25 +2,6 @@ package compiler
 
 import "testing"
 
-func TestDefine(t *testing.T) {
-	expected := map[string]Symbol{
-		"a": {Name: "a", Scope: GlobalScope, Index: 0},
-		"b": {Name: "b", Scope: GlobalScope, Index: 1},
-	}
-
-	global := NewSymbolTable()
-
-	a := global.Define("a")
-	if a != expected["a"] {
-		t.Errorf("expected a=%+v, got=%+v", expected["a"], a)
-	}
-
-	b := global.Define("b")
-	if b != expected["b"] {
-		t.Errorf("expected b=%+v, got=%+v", expected["b"], b)
-	}
-}
-
 func TestResolveGlobal(t *testing.T) {
 	global := NewSymbolTable()
 	global.Define("a")
@@ -76,15 +57,17 @@ func TestResolveNestedLocal(t *testing.T) {
 	global := NewSymbolTable()
 	global.Define("a")
 	global.Define("b")
+
 	firstLocal := NewEnclosedSymbolTable(global)
 	firstLocal.Define("c")
 	firstLocal.Define("d")
+
 	secondLocal := NewEnclosedSymbolTable(firstLocal)
 	secondLocal.Define("e")
 	secondLocal.Define("f")
 
 	tests := []struct {
-		table           *SymbolScope
+		table           *SymbolTable
 		expectedSymbols []Symbol
 	}{
 		{
@@ -121,15 +104,14 @@ func TestResolveNestedLocal(t *testing.T) {
 		}
 	}
 }
-
 func TestDefine(t *testing.T) {
 	expected := map[string]Symbol{
-		"a": Symbol{Name: "a", Scope: GlobalScope, Index: 0},
-		"b": Symbol{Name: "b", Scope: GlobalScope, Index: 1},
-		"c": Symbol{Name: "c", Scope: LocalScope, Index: 0},
-		"d": Symbol{Name: "d", Scope: LocalScope, Index: 1},
-		"e": Symbol{Name: "e", Scope: LocalScope, Index: 0},
-		"f": Symbol{Name: "f", Scope: LocalScope, Index: 1},
+		"a": {Name: "a", Scope: GlobalScope, Index: 0},
+		"b": {Name: "b", Scope: GlobalScope, Index: 1},
+		"c": {Name: "c", Scope: LocalScope, Index: 0},
+		"d": {Name: "d", Scope: LocalScope, Index: 1},
+		"e": {Name: "e", Scope: LocalScope, Index: 0},
+		"f": {Name: "f", Scope: LocalScope, Index: 1},
 	}
 	global := NewSymbolTable()
 	a := global.Define("a")
