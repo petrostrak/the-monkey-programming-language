@@ -25,8 +25,9 @@ const (
 )
 
 type CompiledFunction struct {
-	Instructions code.Instructions
-	NumLocals    int
+	Instructions  code.Instructions
+	NumLocals     int
+	NumParameters int
 }
 
 type ObjectType string
