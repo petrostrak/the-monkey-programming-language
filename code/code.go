@@ -37,6 +37,7 @@ const (
 	OpReturn
 	OpGetLocal
 	OpSetLocal
+	OpGetBuiltin
 )
 
 // The Definition of an Opcode has two fields. Name helps
@@ -75,6 +76,7 @@ var (
 		OpReturn:        {"OpReturn", []int{}},
 		OpGetLocal:      {"OpGetLocal", []int{1}},
 		OpSetLocal:      {"OpSetLocal", []int{1}},
+		OpGetBuiltin:    {"OpGetBuiltin", []int{1}},
 	}
 )
 
