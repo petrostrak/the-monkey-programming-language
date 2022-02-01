@@ -1,6 +1,9 @@
 package vm
 
-import "github.com/petrostrak/the-monkey-programming-language/object"
+import (
+	"github.com/petrostrak/the-monkey-programming-language/code"
+	"github.com/petrostrak/the-monkey-programming-language/object"
+)
 
 type Frame struct {
 	fn          *object.CompiledFunction
@@ -14,5 +17,10 @@ func NewFrame(fn *object.CompiledFunction, basePointer int) *Frame {
 		ip:          -1,
 		basePointer: basePointer,
 	}
+
 	return f
+}
+
+func (f *Frame) Instructions() code.Instructions {
+	return f.fn.Instructions
 }
